@@ -1,0 +1,20 @@
+{
+    "postgres": {
+      "host": "localhost",
+      "dbname": "DBDados",
+      "user": "postgres",
+      "password": "root",
+      "port": 5433
+    },
+    "mongo": {
+      "host": "localhost",
+      "dbname": "DBDados",
+      "collection": "METODO",
+      "port": 27017
+    },
+    "grpc_server": {
+      "host": "localhost",
+      "port": 50051
+    }
+  }
+  

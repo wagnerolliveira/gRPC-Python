@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package myapi;
+
+service MyApi {
+  rpc SendDataToServer (DataRequest) returns (DataResponse);
+}
+
+message DataRequest {
+  int32 MT_CODIGO = 1;
+  string MT_IMPLEMENTACAO = 2;
+  string MT_FQN = 3;
+  int32 CF_CODIGO = 4;
+  string MT_PACOTE = 5;
+  string MT_CLASSE = 6;
+  string MT_METODO = 7;
+  string MT_METODOSPLITCAMEL = 8;
+  // Adicione mais campos conforme necessário
+}
+
+message DataResponse {
+  string status = 1;
+}
