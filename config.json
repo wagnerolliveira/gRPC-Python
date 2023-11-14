@@ -1,20 +1,24 @@
 {
-    "postgres": {
-      "host": "localhost",
-      "dbname": "DBDados",
-      "user": "postgres",
-      "password": "root",
-      "port": 5433
-    },
-    "mongo": {
-      "host": "localhost",
-      "dbname": "DBDados",
-      "collection": "METODO",
-      "port": 27017
-    },
-    "grpc_server": {
-      "host": "localhost",
-      "port": 50051
-    }
+  "postgres": {
+    "host": "host.docker.internal",
+    "dbname": "PTR",
+    "user": "postgres",
+    "password": "1234",
+    "port": 5433
+  },
+  "mongo": {
+    "host": "host.docker.internal",
+    "dbname": "PTR",
+    "collection": "METODO",
+    "port": 27017
+  },
+  "grpc_server": {
+    "host": "localhost",
+    "port": 50051
+  },
+  "grpc_server_connection": {
+    "host": "grpc-server",
+    "port": 50051
   }
-  
+}
+    

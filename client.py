@@ -39,8 +39,8 @@ def run():
         config = json.load(config_file)
     
     # Obter o host e a porta do servidor gRPC do arquivo de configuração
-    grpc_host = config["grpc_server"]["host"]
-    grpc_port = config["grpc_server"]["port"]
+    grpc_host = config["grpc_server_connection"]["host"]
+    grpc_port = config["grpc_server_connection"]["port"]
 
     # Criar o canal gRPC usando as informações do arquivo de configuração
     with grpc.insecure_channel(f'{grpc_host}:{grpc_port}') as channel:
