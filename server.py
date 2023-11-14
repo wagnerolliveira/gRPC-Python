@@ -42,7 +42,7 @@ def serve():
     grpc_host = config["grpc_server"]["host"]
     grpc_port = config["grpc_server"]["port"]
 
-    server.add_insecure_port(f'{grpc_host}:{grpc_port}')
+    server.add_insecure_port(f'[::]:{grpc_port}')
     print("Server started, listening on port 50051...")
     server.start()
     server.wait_for_termination()
