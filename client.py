@@ -3,7 +3,7 @@ import gRPC_pb2
 import gRPC_pb2_grpc
 import psycopg2
 import json
-
+import time
 
 def get_data_from_postgres(config):
     # Conectar ao PostgreSQL
@@ -34,20 +34,11 @@ def get_data_from_postgres(config):
     return rows
 
 
-def run():
-    with open("config.json", "r") as config_file:
-        config = json.load(config_file)
-    
-    # Obter o host e a porta do servidor gRPC do arquivo de configuração
-    grpc_host = config["grpc_server_connection"]["host"]
-    grpc_port = config["grpc_server_connection"]["port"]
-
+def run(data_rows):
     # Criar o canal gRPC usando as informações do arquivo de configuração
     with grpc.insecure_channel(f'{grpc_host}:{grpc_port}') as channel:
         stub = gRPC_pb2_grpc.MyApiStub(channel)
 
-        # Obter dados do PostgreSQL
-        data_rows = get_data_from_postgres(config)
         # Enviar cada registro para o servidor gRPC
         for row in data_rows:
             data_request = gRPC_pb2.DataRequest(
@@ -66,4 +57,25 @@ def run():
 
 
 if __name__ == '__main__':
-    run()
+    with open("config.json", "r") as config_file:
+        config = json.load(config_file)
+    
+    # Obter o host e a porta do servidor gRPC do arquivo de configuração
+    grpc_host = config["grpc_server_connection"]["host"]
+    grpc_port = config["grpc_server_connection"]["port"]
+
+    # Obter dados do PostgreSQL
+    data_rows = get_data_from_postgres(config)
+
+    # Start the timer
+    start_time = time.time()
+
+    run(data_rows)
+
+    end_time = time.time()
+
+    execution_time = (end_time - start_time) * 1000
+
+    print(f"Execution time: {execution_time} milliseconds")
+
+

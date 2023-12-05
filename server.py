@@ -5,15 +5,18 @@ import gRPC_pb2_grpc
 from pymongo import MongoClient
 import json
 
+
+mongo_collection = None
+mongo_client = None
+
 class MyApiServicer(gRPC_pb2_grpc.MyApiServicer):
+    global mongo_client
+    global mongo_collection
+
     def __init__(self, config):
         self.config = config
 
     def SendDataToServer(self, request, context):
-        # Conectar ao MongoDB
-        mongo_client = MongoClient(self.config["mongo"]["host"], self.config["mongo"]["port"])
-        mongo_db = mongo_client[self.config["mongo"]["dbname"]]
-        mongo_collection = mongo_db[self.config["mongo"]["collection"]]
         # Inserir dados no MongoDB
         mongo_collection.insert_one({
             'MT_CODIGO': request.MT_CODIGO,
@@ -27,14 +30,19 @@ class MyApiServicer(gRPC_pb2_grpc.MyApiServicer):
             # Adicione mais campos conforme necessário
         })
 
-        # Fechar conexão com o MongoDB
-        mongo_client.close()
-
         return gRPC_pb2.DataResponse(status='Data received and inserted into MongoDB successfully.')
 
 def serve():
+    global mongo_client
+    global mongo_collection
+
     with open("config.json", "r") as config_file:
         config = json.load(config_file)
+
+    # Conectar ao MongoDB
+    mongo_client = MongoClient(config["mongo"]["host"], config["mongo"]["port"])
+    mongo_db = mongo_client[config["mongo"]["dbname"]]
+    mongo_collection = mongo_db[config["mongo"]["collection"]]
     
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     gRPC_pb2_grpc.add_MyApiServicer_to_server(MyApiServicer(config), server)
@@ -46,6 +54,9 @@ def serve():
     print("Server started, listening on port 50051...")
     server.start()
     server.wait_for_termination()
+
+    # Fechar conexão com o MongoDB
+    mongo_client.close()
 
 if __name__ == '__main__':
     serve()
